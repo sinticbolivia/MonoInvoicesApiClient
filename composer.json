@@ -1,0 +1,19 @@
+{
+	"name" : "sinticbolivia/mono-invoices-api",
+	"description" : "API Classes to connect to MonoInvoices Server",
+	"type" : "library",
+	"license" : "GNU/GPL",
+	"autoload" : {
+		"psr-4" : {
+			"Sinticbolivia\\MonoInvoicesApi\\" : "src/"
+		}
+	},
+	"authors" : [{
+			"name" : "J. Marcelo Aviles Paco"
+		}
+	],
+	"support" : {
+		"email" : "sinticbolivia.net@gmail.com"
+	},
+	"homepage" : "https://sinticbolivia.net"
+}
