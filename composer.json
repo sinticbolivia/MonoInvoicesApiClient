@@ -2,7 +2,7 @@
 	"name" : "sinticbolivia/mono-invoices-api",
 	"description" : "API Classes to connect to MonoInvoices Server",
 	"type" : "library",
-	"license" : "GNU/GPL",
+	"license" : "GPL-3.0-or-later",
 	"autoload" : {
 		"psr-4" : {
 			"SinticBolivia\\MonoInvoicesApi\\" : "src/",
