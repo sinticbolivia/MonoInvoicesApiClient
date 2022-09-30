@@ -19,5 +19,8 @@
 	"support" : {
 		"email" : "sinticbolivia.net@gmail.com"
 	},
-	"homepage" : "https://sinticbolivia.net"
+	"homepage" : "https://sinticbolivia.net",
+	"keywords" : [
+		"monoinvoices"
+	]
 }
