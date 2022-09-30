@@ -38,7 +38,7 @@ class RequestResponse
 			list($key, $val) = array_map('trim', explode(':', $h));
 			if( $key == 'Set-Cookie' )
 			{
-				$this->parseCookie($val);
+				//$this->parseCookie($val);
 				continue;
 			}
 			$this->headers[$key] = $val;

@@ -1,7 +1,6 @@
 <?php
 namespace SinticBolivia\MonoInvoicesApi\Classes;
 
-//use RequestResponse;
 //use Exception;
 
 class Request
@@ -130,5 +129,15 @@ class Request
 	public function post($url, $data, $headers = null)
 	{
 		return $this->request($url, $data, 'POST', $headers);
+	}
+	/**
+	 * 
+	 * @param string $url
+	 * @param array $headers
+	 * @return \SinticBolivia\MonoInvoicesApi\Classes\RequestResponse
+	 */
+	public function delete($url, $headers = null)
+	{
+		return $this->request($url, null, 'DELETE');
 	}
 }

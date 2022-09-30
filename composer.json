@@ -5,7 +5,11 @@
 	"license" : "GNU/GPL",
 	"autoload" : {
 		"psr-4" : {
-			"Sinticbolivia\\MonoInvoicesApi\\" : "src/"
+			"SinticBolivia\\MonoInvoicesApi\\" : "src/",
+			"SinticBolivia\\MonoInvoicesApi\\Classes\\" : [
+				"src",
+				"src/Classes"
+			]
 		}
 	},
 	"authors" : [{

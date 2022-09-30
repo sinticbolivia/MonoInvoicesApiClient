@@ -23,7 +23,7 @@ class MonoInvoicesApi
 		$req->setHeaders(['Content-Type' => 'application/json']);
 		$res = $req->post($endpoint, $data);
 		if( $res->statusCode != 200 )
-			throw new ExceptionApi('Error de atenticacion', $res);
+			throw new ExceptionApi('Error de autenticacion', $res);
 		$obj = $res->json();
 		$this->token = $obj->data->token;
 		
@@ -42,12 +42,12 @@ class MonoInvoicesApi
 	{
 		$headers = ['Content-Type' => 'application/json'];
 		if( $this->token )
-			$headers['Athorization'] = 'Bearer ' . $this->token;
+			$headers['Authorization'] = 'Bearer ' . $this->token;
 		
 		$req = new Request();
 		$req->setHeaders($headers);
 		
-		return $res;
+		return $req;
 	}
 	/**
 	 * 
@@ -92,7 +92,7 @@ class MonoInvoicesApi
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de catalogo', $res);
 			
-			return $res->json();
+		return $res->json();
 	}
 	/**
 	 *
@@ -109,8 +109,33 @@ class MonoInvoicesApi
 			
 		return $res->json();
 	}
-	public function crearFactura()
+	public function crearFactura(Factura $factura)
 	{
-		
+		$this->validateToken();
+		$endpoint = $this->baseUrl . '/invoices';
+		$data = json_encode($factura);
+		$res = $this->getRequest()->post($endpoint, $data);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error creando factura', $res);
+		return $res->json();
+	}
+	public function anularFactura(int $id, int $codigoMotivo)
+	{
+		$this->validateToken();
+		$endpoint = $this->baseUrl . '/invoices/' . $id . '/void';
+		$data = json_encode(['motivo_id' => $codigoMotivo]);
+		$res = $this->getRequest()->post($endpoint, $data);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error anulando factura', $res);
+		return $res->json();
+	}
+	public function cerrarEvento(int $id)
+	{
+		$this->validateToken();
+		$endpoint = '/invoices/siat/v2/eventos/'. $id .'/cerrar';
+		$res = $this->getRequest()->get($endpoint, $data);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error anulando factura', $res);
+		return $res->json();
 	}
 }
