@@ -83,5 +83,5 @@ function testAnularFactura()
 	}
 }
 testLogin();
-//testFactura();
-testAnularFactura();
+testFactura();
+//testAnularFactura();

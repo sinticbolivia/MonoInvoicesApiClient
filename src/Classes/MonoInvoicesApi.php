@@ -129,6 +129,26 @@ class MonoInvoicesApi
 			throw new ExceptionApi('Error anulando factura', $res);
 		return $res->json();
 	}
+	public function obtenerFactura(int $id)
+	{
+		$this->validateToken();
+		$endpoint = '/invoices/siat/v2/invoices/' . $id;
+		$res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obteniendo factura', $res);
+		return $res->json();
+	}
+	public function crearEvento(Evento $evento)
+	{
+		$this->validateToken();
+		$endpoint 	= '/invoices/siat/v2/eventos';
+		$data 		= json_encode($evento);
+		$res 		= $this->getRequest()->post($endpoint, $data);
+		
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error creando evento', $res);
+		return $res->json();
+	}
 	public function cerrarEvento(int $id)
 	{
 		$this->validateToken();
