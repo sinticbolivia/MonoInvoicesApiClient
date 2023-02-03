@@ -3,6 +3,9 @@ namespace SinticBolivia\MonoInvoicesApi\Classes;
 
 class Factura
 {
+	const	FACTURA_CON_CREDITO_FISCAL = 1;
+	const	FACTURA_SIN_CREDITO_FISCAL = 2;
+	
 	public 	$customer_id;
 	public 	$customer;
 	public	$nit_ruc_nif;
