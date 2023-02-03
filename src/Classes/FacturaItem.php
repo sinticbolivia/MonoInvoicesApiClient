@@ -1,7 +1,7 @@
 <?php
 namespace SinticBolivia\MonoInvoicesApi\Classes;
 
-class FacturaItem
+class FacturaItem extends SBObject
 {
 	public	$product_id = 0;
 	public	$product_code;
@@ -13,4 +13,9 @@ class FacturaItem
 	public	$codigo_producto_sin;
 	public	$codigo_actividad;
 	public	$total;
+	
+	public function __construct()
+	{
+		
+	}
 }

@@ -6,7 +6,7 @@ use Exception;
 class MonoInvoicesApi
 {
 	public	$server;
-	public 	$version = '1.0.0';
+	public 	$version = '1.0.3';
 	public	$baseUrl;
 	public	$token;
 	
@@ -157,5 +157,61 @@ class MonoInvoicesApi
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error anulando factura', $res);
 		return $res->json();
+	}
+	/**
+	 * 
+	 * @param int $id
+	 * @param string $tpl Plantilla de la factura pagina|rollo
+	 * @throws ExceptionApi
+	 * @return mixed
+	 */
+	public function obtenerPdf(int $id, $tpl = null)
+	{
+		$this->validateToken();
+		$endpoint = '/invoices/'. $id .'/pdf';
+		if( $tpl )
+			$endpoint .= '?tpl=' . $tpl;
+		
+		$res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obtiendo el PDF de la factura', $res);
+		return $res->json();
+	}
+	/**
+	 * 
+	 * @param Cliente $cliente
+	 * @throws ExceptionApi
+	 * @return \SinticBolivia\MonoInvoicesApi\Classes\Cliente
+	 */
+	public function crearCliente(Cliente $cliente)
+	{
+		$this->validateToken();
+		$endpoint = '/customers';
+		$data = json_encode($client);
+		$res = $this->getRequest()->post($endpoint, $data);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error creando el cliente', $res);
+		
+		$cliente->bind($res->json());
+		
+		return $cliente;
+	}
+	/**
+	 * 
+	 * @param int $id
+	 * @throws ExceptionApi
+	 * @return \SinticBolivia\MonoInvoicesApi\Classes\Cliente
+	 */
+	public function obtenerCliente(int $id)
+	{
+		$this->validateToken();
+		$endpoint = '/customers/' . $id;
+		$res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obtiendo el PDF de la factura', $res);
+		$cliente = new Cliente();
+		$cliente->bind($res->json());
+		
+		return $cliente;
 	}
 }

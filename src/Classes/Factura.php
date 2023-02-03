@@ -1,11 +1,12 @@
 <?php
 namespace SinticBolivia\MonoInvoicesApi\Classes;
 
-class Factura
+class Factura extends SBObject
 {
 	const	FACTURA_CON_CREDITO_FISCAL = 1;
 	const	FACTURA_SIN_CREDITO_FISCAL = 2;
 	
+	public	$invoice_id;
 	public 	$customer_id;
 	public 	$customer;
 	public	$nit_ruc_nif;
@@ -21,10 +22,31 @@ class Factura
 	public	$complemento;
 	public	$numero_tarjeta;
 	public	$tipo_factura_documento = 1;
+	public	$subtotal;
+	public	$total;
+	public	$invoice_number;
+	public	$control_code;
+	public	$invoice_date_time;
+	public	$status;
+	public	$cufd;
+	public	$cuf;
+	public	$evento_id;
+	public	$tipo_emision;
+	public	$nit_emisor;
+	public	$siat_id;
+	public	$leyenda;
+	public	$siat_url;
+	public	$data;
+	
 	/**
 	 * @var FacturaItem[]
 	 */
 	public	$items = [];
+	
+	public function __construct()
+	{
+		
+	}
 	
 }
 
