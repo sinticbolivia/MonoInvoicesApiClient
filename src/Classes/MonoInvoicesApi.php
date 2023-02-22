@@ -132,7 +132,7 @@ class MonoInvoicesApi
 	public function obtenerFactura(int $id)
 	{
 		$this->validateToken();
-		$endpoint = '/invoices/siat/v2/invoices/' . $id;
+		$endpoint = $this->baseUrl . '/invoices/siat/v2/invoices/' . $id;
 		$res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obteniendo factura', $res);
@@ -141,7 +141,7 @@ class MonoInvoicesApi
 	public function crearEvento(Evento $evento)
 	{
 		$this->validateToken();
-		$endpoint 	= '/invoices/siat/v2/eventos';
+		$endpoint 	= $this->baseUrl . '/invoices/siat/v2/eventos';
 		$data 		= json_encode($evento);
 		$res 		= $this->getRequest()->post($endpoint, $data);
 		
@@ -152,7 +152,7 @@ class MonoInvoicesApi
 	public function cerrarEvento(int $id)
 	{
 		$this->validateToken();
-		$endpoint = '/invoices/siat/v2/eventos/'. $id .'/cerrar';
+		$endpoint = $this->baseUrl . '/invoices/siat/v2/eventos/'. $id .'/cerrar';
 		$res = $this->getRequest()->get($endpoint, $data);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error anulando factura', $res);
@@ -168,7 +168,7 @@ class MonoInvoicesApi
 	public function obtenerPdf(int $id, $tpl = null)
 	{
 		$this->validateToken();
-		$endpoint = '/invoices/'. $id .'/pdf';
+		$endpoint = $this->baseUrl . '/invoices/'. $id .'/pdf';
 		if( $tpl )
 			$endpoint .= '?tpl=' . $tpl;
 		
@@ -186,7 +186,7 @@ class MonoInvoicesApi
 	public function crearCliente(Cliente $cliente)
 	{
 		$this->validateToken();
-		$endpoint = '/customers';
+		$endpoint = $this->baseUrl . '/customers';
 		$data = json_encode($client);
 		$res = $this->getRequest()->post($endpoint, $data);
 		if( $res->statusCode != 200 )
@@ -205,7 +205,7 @@ class MonoInvoicesApi
 	public function obtenerCliente(int $id)
 	{
 		$this->validateToken();
-		$endpoint = '/customers/' . $id;
+		$endpoint = $this->baseUrl . '/customers/' . $id;
 		$res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obtiendo el PDF de la factura', $res);
@@ -213,5 +213,15 @@ class MonoInvoicesApi
 		$cliente->bind($res->json());
 		
 		return $cliente;
+	}
+	public function tiposDocumentoIdentidad()
+	{
+		$this->validateToken();
+		$endpoint = $this->baseUrl . '/invoices/siat/v2/sync-documentos-identidad/';
+		$res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obtiendo el PDF de la factura', $res);
+		
+		return $res->json();
 	}
 }
