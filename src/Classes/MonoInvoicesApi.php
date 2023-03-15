@@ -153,7 +153,7 @@ class MonoInvoicesApi
 	{
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/eventos/'. $id .'/cerrar';
-		$res = $this->getRequest()->get($endpoint, $data);
+		$res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error anulando factura', $res);
 		return $res->json();
@@ -187,7 +187,7 @@ class MonoInvoicesApi
 	{
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/customers';
-		$data = json_encode($client);
+		$data = json_encode($cliente);
 		$res = $this->getRequest()->post($endpoint, $data);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error creando el cliente', $res);
@@ -223,5 +223,42 @@ class MonoInvoicesApi
 			throw new ExceptionApi('Error obtiendo el PDF de la factura', $res);
 		
 		return $res->json();
+	}
+	/**
+	 * Obtener listado de facturas
+	 * $args Es un array de argumentos aceptados
+	 * 		keyword: Especifica la palabra clave para la busqueda
+	 * 		date_init: Especifica la fecha inicial para intervalo de busqueda
+	 * 		date_end: Especifica la fecha fin para intervalo de busqueda
+	 * 
+	 * @param number $page
+	 * @param number $limit
+	 * @param array $args
+	 * @throws ExceptionApi
+	 * @return Factura[]
+	 */
+	public function listadoFacturas($page = 1, $limit = 10, $args = [])
+	{
+		$this->validateToken();
+		$endpoint = $this->baseUrl . sprintf("/invoices/siat/v2/invoices?page=%d&limit=%d", $page, $limit);
+		if( is_array($args) )
+		{
+			$endpoint .= '&' . http_build_query($args);	
+		}
+		$res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obtiendo el listado de facturas', $res);
+			
+		return $res->json()->data;
+	}
+	public function validarNit($nit)
+	{
+		$this->validateToken();
+		$endpoint = $this->baseUrl . '/invoices/siat/v2/validate-nit?nit=' . $nit;
+		$res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error de validacion del NIT', $res);
+			
+		return $res->json()->data;
 	}
 }
