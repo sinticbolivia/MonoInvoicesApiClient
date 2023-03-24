@@ -1,4 +1,6 @@
 <?php
+namespace SinticBolivia\MonoInvoicesApi;
+
 use SinticBolivia\MonoInvoicesApi\Classes\MonoInvoicesApi;
 
 if( !function_exists('siat_widget_unidades_medida')):

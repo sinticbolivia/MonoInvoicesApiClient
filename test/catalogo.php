@@ -2,6 +2,7 @@
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 //die(dirname(__DIR__));
 use SinticBolivia\MonoInvoicesApi\Classes\MonoInvoicesApi;
+use function SinticBolivia\MonoInvoicesApi\siat_widget_actividades;
 
 function instanceApi()
 {
@@ -25,5 +26,11 @@ function testUnidadesMedida()
 	$res = $api->unidadesMedida();
 	print_r($res);
 }
+function testWidgets()
+{
+	$api = instanceApi();
+	siat_widget_actividades($api);
+}
 testLogin();
 testUnidadesMedida();
+testWidgets();
