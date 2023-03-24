@@ -4,6 +4,12 @@
 	"type" : "library",
 	"license" : "GPL-3.0-or-later",
 	"autoload" : {
+		"psr-0" : {
+			"SinticBolivia\\MonoInvoicesApi\\" : "src/"
+		},
+		"files" : [
+			"src/widgets.php"
+		],
 		"psr-4" : {
 			"SinticBolivia\\MonoInvoicesApi\\" : "src/",
 			"SinticBolivia\\MonoInvoicesApi\\Classes\\" : [
