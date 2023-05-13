@@ -10,7 +10,7 @@ class ExceptionApi extends Exception
 	 */
 	public	$response;
 	
-	public function __construct($message, RequestResponse $response, $code = null)
+	public function __construct($message, RequestResponse $response, $code = 0)
 	{
 		parent::__construct($message, $code);
 		$this->response = $response;
