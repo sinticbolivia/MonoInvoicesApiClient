@@ -10,7 +10,6 @@ composer require sinticbolivia/mono-invoices-api
 ## Ejemplo de Generacion de Factura
 
 ```
-require_once dirname(__DIR__) . '/vendor/autoload.php';
 use SinticBolivia\MonoInvoicesApi\Classes\MonoInvoicesApi;
 use SinticBolivia\MonoInvoicesApi\Classes\Factura;
 use SinticBolivia\MonoInvoicesApi\Classes\ExceptionApi;
