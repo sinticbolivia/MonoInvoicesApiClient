@@ -77,7 +77,10 @@ class MonoInvoicesApi
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de catalogo', $res);
 			
-		return $res->json();
+		$res = $res->json();
+		if( is_object($res->data->RespuestaListaActividades->listaActividades) )
+			$res->data->RespuestaListaActividades->listaActividades = [$res->data->RespuestaListaActividades->listaActividades];
+		return $res;
 	}
 	/**
 	 *
