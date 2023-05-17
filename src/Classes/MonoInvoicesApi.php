@@ -138,6 +138,16 @@ class MonoInvoicesApi
 			throw new ExceptionApi('Error obteniendo factura', $res);
 		return $res->json();
 	}
+	public function listadoEventos(int $sucursal = 0, int $puntoventa = 0, int $page = 1, int $limit = 25)
+	{
+		$this->validateToken();
+		$endpoint = $this->baseUrl . "/invoices/siat/v2/eventos?sucursal_id={$sucursal}&puntoventa_id={$puntoventa}&page={$page}&limit={$limit}";
+		$res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obteniendo Eventos', $res);
+			
+		return $res->json()->data;
+	}
 	public function crearEvento(Evento $evento)
 	{
 		$this->validateToken();
@@ -258,6 +268,36 @@ class MonoInvoicesApi
 		$res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de validacion del NIT', $res);
+			
+		return $res->json()->data;
+	}
+	public function listadoCufds(int $sucursal = 0, int $puntoventa = 0, int $page = 1, int $limit = 25)
+	{
+		$this->validateToken();
+		$endpoint = $this->baseUrl . "/invoices/siat/v2/cufds?sucursal_id={$sucursal}&puntoventa_id={$puntoventa}&page={$page}&limit={$limit}";
+		$res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obteniendo CUFDs', $res);
+			
+		return $res->json()->data;
+	}
+	public function listadoSucursales(int $page = 1, int $limit = 25)
+	{
+		$this->validateToken();
+		$endpoint = $this->baseUrl . "/invoices/siat/v2/branches?page={$page}&limit={$limit}";
+		$res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obteniendo Sucursales', $res);
+			
+		return $res->json()->data;
+	}
+	public function listadoPuntosVenta(int $sucursal = 0, int $page = 1, int $limit = 25)
+	{
+		$this->validateToken();
+		$endpoint = $this->baseUrl . "/invoices/siat/v2/puntos-venta?sucursal_id={$sucursal}&page={$page}&limit={$limit}";
+		$res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obteniendo Puntos Venta', $res);
 			
 		return $res->json()->data;
 	}
