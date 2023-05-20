@@ -304,4 +304,23 @@ class MonoInvoicesApi
 			
 		return $res->json()->data;
 	}
+	/**
+	 *
+	 * @param int $id
+	 * @param string $tpl Plantilla de la factura pagina|rollo
+	 * @throws ExceptionApi
+	 * @return mixed
+	 */
+	public function obtenerHtml(int $id, $tpl = null)
+	{
+		$this->validateToken();
+		$endpoint = $this->baseUrl . '/invoices/'. $id .'/html';
+		if( $tpl )
+			$endpoint .= '?tpl=' . $tpl;
+			
+		$res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obtiendo el HTML de la factura', $res);
+		return $res->json();
+	}
 }
