@@ -29,7 +29,7 @@ function siat_widget_actividades(MonoInvoicesApi $api, $selected = '', $name = '
 	?>
 	<div class="mb-3">
 		<label>Actividad Economica SIAT</label>
-		<select id="<?php print $name ?>" name="<?php print $name ?>" class="form-control form-select" data-selected="<?php print $selected ?>">
+		<select id="actividad_economica_siat" name="<?php print $name ?>" class="form-control form-select" data-selected="<?php print $selected ?>">
 			<option value="">-- actividad economica --</option>
 			<?php foreach($res->data->RespuestaListaActividades->listaActividades as $a): ?>
 			<option value="<?php print $a->codigoCaeb ?>" <?php print $selected == $a->codigoCaeb ? 'selected' : '' ?>>
