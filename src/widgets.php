@@ -57,7 +57,7 @@ function siat_widget_productos(MonoInvoicesApi $api, $selected = '', $name = 'co
 	{
 		const productos_sin = <?php print json_encode($res->data->RespuestaListaProductos->listaCodigos); ?>;
 		const elActividad = document.querySelector('#actividad_economica_siat');
-		const elProductos = document.querySelector('#codigo_producto_siat');
+		const elProductos = document.querySelector('#<?php print $name ?>');
 		
 		function filterProducts(codigo_actividad)
 		{
