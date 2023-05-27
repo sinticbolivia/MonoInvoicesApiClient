@@ -6,9 +6,11 @@ use Exception;
 class MonoInvoicesApi
 {
 	public	$server;
-	public 	$version = '1.0.3';
+	public 	$version = '1.0.13';
 	public	$baseUrl;
 	public	$token;
+	public	$enableCache = false;
+	public	$cacheDir = null;
 	
 	public function __construct($srv)
 	{
@@ -49,6 +51,31 @@ class MonoInvoicesApi
 		
 		return $req;
 	}
+	public function isCacheEnabled()
+	{
+		if( $this->enableCache && $this->cacheDir /*&& is_dir($this->cacheDir)*/ )
+		{
+			return true;
+		}
+		return false;
+	}
+	public function saveCache($filename, $data)
+	{
+		if( !$this->isCacheEnabled() )
+			return false;
+		file_put_contents($filename, json_encode($data));
+	}
+	public function loadCache($filename)
+	{
+		$daySecs = 86400;
+		
+		if( !is_file($filename) || filesize($filename) <= 0 )
+			return null;
+		if( !filectime($filename) || ( (time() - filectime($filename)) > $daySecs  ) )
+			return null;
+		$data = json_decode(file_get_contents($filename));
+		return $data;
+	}
 	/**
 	 * 
 	 * @throws ExceptionApi
@@ -57,10 +84,16 @@ class MonoInvoicesApi
 	public function unidadesMedida()
 	{
 		$this->validateToken();
+		$filename = sprintf("%s/unidades-medida.json", $this->cacheDir);
+		
+		if( $this->isCacheEnabled() && ($data = $this->loadCache($filename)) )
+			return $data;
+		
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/sync-unidades-medida';
 		$res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de catalogo', $res);
+		$this->saveCache($filename, $res->json());
 		
 		return $res->json();
 	}
@@ -71,7 +104,12 @@ class MonoInvoicesApi
 	 */
 	public function actividades()
 	{
+		$filename = sprintf("%s/actividades.json", $this->cacheDir);
+		if( $this->isCacheEnabled() && ($data = $this->loadCache($filename)) )
+			return $data;
+		
 		$this->validateToken();
+		
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/actividades';
 		$res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
@@ -80,6 +118,8 @@ class MonoInvoicesApi
 		$res = $res->json();
 		if( is_object($res->data->RespuestaListaActividades->listaActividades) )
 			$res->data->RespuestaListaActividades->listaActividades = [$res->data->RespuestaListaActividades->listaActividades];
+		$this->saveCache($filename, $res);
+		
 		return $res;
 	}
 	/**
@@ -89,12 +129,18 @@ class MonoInvoicesApi
 	 */
 	public function productosServicios()
 	{
+		$filename = sprintf("%s/productos-servicios.json", $this->cacheDir);
+		if( $this->isCacheEnabled() && ($data = $this->loadCache($filename)) )
+			return $data;
+		
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/lista-productos-servicios';
 		$res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de catalogo', $res);
-			
+		
+		$this->saveCache($filename, $res->json());
+		
 		return $res->json();
 	}
 	/**
@@ -104,12 +150,18 @@ class MonoInvoicesApi
 	 */
 	public function motivosAnulacion()
 	{
+		$filename = sprintf("%s/motivos-anulacion.json", $this->cacheDir);
+		if( $this->isCacheEnabled() && ($data = $this->loadCache($filename)) )
+			return $data;
+		
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/sync-motivos-anulacion';
 		$res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de catalogo', $res);
-			
+		
+		$this->saveCache($filename, $res->json());
+		
 		return $res->json();
 	}
 	public function crearFactura(Factura $factura)
@@ -143,13 +195,19 @@ class MonoInvoicesApi
 	}
 	public function listadoEventos(int $sucursal = 0, int $puntoventa = 0, int $page = 1, int $limit = 25)
 	{
+		$filename = sprintf("%s/eventos.json", $this->cacheDir);
+		if( $this->isCacheEnabled() && ($data = $this->loadCache($filename)) )
+			return $data;
+		
 		$this->validateToken();
 		$endpoint = $this->baseUrl . "/invoices/siat/v2/eventos?sucursal_id={$sucursal}&puntoventa_id={$puntoventa}&page={$page}&limit={$limit}";
 		$res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obteniendo Eventos', $res);
-			
-		return $res->json()->data;
+		
+		$this->saveCache($filename, $res->json());
+		
+		return $res->json();
 	}
 	public function crearEvento(Evento $evento)
 	{

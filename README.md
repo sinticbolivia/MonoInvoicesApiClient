@@ -1,6 +1,6 @@
-# MonoInvoicesApiClient
+# MonoInvoicesApiClient - Facturacion Electronica SIAT
 
-Libreria para la conexion a la API de facturacion
+Libreria para la conexion a la API de facturacion SIAT
 
 Instalacion composer
 
