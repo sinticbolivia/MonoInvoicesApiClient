@@ -9,6 +9,7 @@ class Factura extends SBObject
 	public	$invoice_id;
 	public 	$customer_id;
 	public 	$customer;
+	public 	$customer_email;
 	public	$nit_ruc_nif;
 	public	$discount;
 	public	$monto_giftcard = 0;

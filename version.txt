@@ -1,0 +1,9 @@
+1.0.14
+========
+- Added method to get customers
+- Added method to get products
+- Added a migration class
+
+1.0.13
+========
+- Added functions for easy integration

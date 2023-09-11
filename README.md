@@ -2,10 +2,20 @@
 
 Libreria para la conexion a la API de facturacion SIAT
 
-Instalacion composer
+### Instalacion composer
 
+```
 composer require sinticbolivia/mono-invoices-api
+```
 
+### Instalacion sin composer
+
+Descargar el zip
+
+Incluir la libreria en su sistema
+
+```
+```
 
 ## Ejemplo de Generacion de Factura
 

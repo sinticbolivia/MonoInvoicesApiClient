@@ -11,6 +11,7 @@ class MonoInvoicesApi
 	public	$token;
 	public	$enableCache = false;
 	public	$cacheDir = null;
+	public	$lastResponse = null;
 	
 	public function __construct($srv)
 	{
@@ -23,7 +24,7 @@ class MonoInvoicesApi
 		$data = json_encode(['username' => $username, 'password' => $pass]);
 		$req = new Request();
 		$req->setHeaders(['Content-Type' => 'application/json']);
-		$res = $req->post($endpoint, $data);
+		$this->lastResponse = $res = $req->post($endpoint, $data);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de autenticacion', $res);
 		$obj = $res->json();
@@ -90,7 +91,7 @@ class MonoInvoicesApi
 			return $data;
 		
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/sync-unidades-medida';
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de catalogo', $res);
 		$this->saveCache($filename, $res->json());
@@ -111,7 +112,7 @@ class MonoInvoicesApi
 		$this->validateToken();
 		
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/actividades';
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de catalogo', $res);
 			
@@ -135,7 +136,7 @@ class MonoInvoicesApi
 		
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/lista-productos-servicios';
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de catalogo', $res);
 		
@@ -156,7 +157,7 @@ class MonoInvoicesApi
 		
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/sync-motivos-anulacion';
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de catalogo', $res);
 		
@@ -169,7 +170,7 @@ class MonoInvoicesApi
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/invoices';
 		$data = json_encode($factura);
-		$res = $this->getRequest()->post($endpoint, $data);
+		$this->lastResponse = $res = $this->getRequest()->post($endpoint, $data);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error creando factura', $res);
 		return $res->json();
@@ -179,7 +180,7 @@ class MonoInvoicesApi
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/invoices/' . $id . '/void';
 		$data = json_encode(['motivo_id' => $codigoMotivo]);
-		$res = $this->getRequest()->post($endpoint, $data);
+		$this->lastResponse = $res = $this->getRequest()->post($endpoint, $data);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error anulando factura', $res);
 		return $res->json();
@@ -188,7 +189,7 @@ class MonoInvoicesApi
 	{
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/invoices/' . $id;
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obteniendo factura', $res);
 		return $res->json();
@@ -201,7 +202,7 @@ class MonoInvoicesApi
 		
 		$this->validateToken();
 		$endpoint = $this->baseUrl . "/invoices/siat/v2/eventos?sucursal_id={$sucursal}&puntoventa_id={$puntoventa}&page={$page}&limit={$limit}";
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obteniendo Eventos', $res);
 		
@@ -214,7 +215,7 @@ class MonoInvoicesApi
 		$this->validateToken();
 		$endpoint 	= $this->baseUrl . '/invoices/siat/v2/eventos';
 		$data 		= json_encode($evento);
-		$res 		= $this->getRequest()->post($endpoint, $data);
+		$this->lastResponse = $res 		= $this->getRequest()->post($endpoint, $data);
 		
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error creando evento', $res);
@@ -224,7 +225,7 @@ class MonoInvoicesApi
 	{
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/eventos/'. $id .'/cerrar';
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error anulando factura', $res);
 		return $res->json();
@@ -243,7 +244,7 @@ class MonoInvoicesApi
 		if( $tpl )
 			$endpoint .= '?tpl=' . $tpl;
 		
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obtiendo el PDF de la factura', $res);
 		return $res->json();
@@ -259,7 +260,7 @@ class MonoInvoicesApi
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/customers';
 		$data = json_encode($cliente);
-		$res = $this->getRequest()->post($endpoint, $data);
+		$this->lastResponse = $res = $this->getRequest()->post($endpoint, $data);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error creando el cliente', $res);
 		
@@ -277,7 +278,7 @@ class MonoInvoicesApi
 	{
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/customers/' . $id;
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obtiendo el PDF de la factura', $res);
 		$cliente = new Cliente();
@@ -289,7 +290,7 @@ class MonoInvoicesApi
 	{
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/sync-documentos-identidad/';
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obtiendo el PDF de la factura', $res);
 		
@@ -316,7 +317,7 @@ class MonoInvoicesApi
 		{
 			$endpoint .= '&' . http_build_query($args);	
 		}
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obtiendo el listado de facturas', $res);
 			
@@ -326,7 +327,7 @@ class MonoInvoicesApi
 	{
 		$this->validateToken();
 		$endpoint = $this->baseUrl . '/invoices/siat/v2/validate-nit?nit=' . $nit;
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error de validacion del NIT', $res);
 			
@@ -336,7 +337,7 @@ class MonoInvoicesApi
 	{
 		$this->validateToken();
 		$endpoint = $this->baseUrl . "/invoices/siat/v2/cufds?sucursal_id={$sucursal}&puntoventa_id={$puntoventa}&page={$page}&limit={$limit}";
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obteniendo CUFDs', $res);
 			
@@ -346,7 +347,7 @@ class MonoInvoicesApi
 	{
 		$this->validateToken();
 		$endpoint = $this->baseUrl . "/invoices/siat/v2/branches?page={$page}&limit={$limit}";
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obteniendo Sucursales', $res);
 			
@@ -356,7 +357,7 @@ class MonoInvoicesApi
 	{
 		$this->validateToken();
 		$endpoint = $this->baseUrl . "/invoices/siat/v2/puntos-venta?sucursal_id={$sucursal}&page={$page}&limit={$limit}";
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obteniendo Puntos Venta', $res);
 			
@@ -376,9 +377,42 @@ class MonoInvoicesApi
 		if( $tpl )
 			$endpoint .= '?tpl=' . $tpl;
 			
-		$res = $this->getRequest()->get($endpoint);
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
 		if( $res->statusCode != 200 )
 			throw new ExceptionApi('Error obtiendo el HTML de la factura', $res);
 		return $res->json();
+	}
+	/**
+	 * 
+	 * @param int $page
+	 * @param int $limit
+	 * @throws ExceptionApi
+	 * @return \SinticBolivia\MonoInvoicesApi\Classes\RequestResponse
+	 */
+	public function listadoClientes(int $page = 1, int $limit = 50)
+	{
+		$this->validateToken();
+		$endpoint = $this->baseUrl . "/customers?page=$page&limit=$limit";
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obtiendo listado de clientes', $res);
+		return $res;
+	}
+	/**
+	 * Obtiene el listado de productos
+	 * 
+	 * @param int $page
+	 * @param int $limit
+	 * @throws ExceptionApi
+	 * @return \SinticBolivia\MonoInvoicesApi\Classes\RequestResponse
+	 */
+	public function listadoProductos(int $page = 1, int $limit = 50)
+	{
+		$this->validateToken();
+		$endpoint = $this->baseUrl . "/invoices/products?page=$page&limit=$limit";
+		$this->lastResponse = $res = $this->getRequest()->get($endpoint);
+		if( $res->statusCode != 200 )
+			throw new ExceptionApi('Error obtiendo listado de productos', $res);
+		return $res->json()->data;
 	}
 }
